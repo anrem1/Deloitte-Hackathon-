@@ -175,3 +175,8 @@ A raw staging layer prevents data loss and enables reprocessing
 
 Mirrors best practices in enterprise data platforms
 
+##  Contributions:
+- Creating the database: Ghada Ismail, Knzy ElMasry
+- AI Agent& Backend: Ali ElKhouly, Ghada Ismail
+- Frontend: Merna Hebishy, Knzy Elmasry
+- Business Side(KPIs, etc): Farida Ragheb, Habiba Seif
