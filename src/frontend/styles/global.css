@@ -169,6 +169,51 @@ h1 {
   transform: none;
 }
 
+.text-input {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.text-input-header {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.text-input-icon {
+  width: 56px;
+  height: 56px;
+  color: #f093fb;
+  opacity: 0.85;
+}
+
+.menu-textarea {
+  width: 100%;
+  min-height: 220px;
+  border-radius: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  background: rgba(15, 12, 41, 0.6);
+  color: #e8e6e3;
+  font-size: 1rem;
+  line-height: 1.6;
+  padding: 20px;
+  resize: vertical;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-family: 'Work Sans', sans-serif;
+}
+
+.menu-textarea:focus {
+  outline: none;
+  border-color: rgba(240, 147, 251, 0.6);
+  box-shadow: 0 0 0 3px rgba(240, 147, 251, 0.15);
+}
+
+.text-input-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
 /* Loading State */
 .analyzing {
   text-align: center;
@@ -255,6 +300,30 @@ h1 {
 .changes-list {
   display: grid;
   gap: 20px;
+}
+
+.answer-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 32px;
+  line-height: 1.8;
+  font-size: 1.05rem;
+}
+
+.answer-text {
+  color: #e8e6e3;
+  white-space: pre-wrap;
+}
+
+.error-banner {
+  margin: 24px 0;
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: rgba(245, 87, 108, 0.15);
+  border: 1px solid rgba(245, 87, 108, 0.4);
+  color: #ffd7dc;
 }
 
 /* Change Cards */

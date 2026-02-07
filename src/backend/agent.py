@@ -11,11 +11,12 @@ from typing import TypedDict
 import httpx
 from dotenv import load_dotenv
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import HumanMessage
 from langgraph.graph import StateGraph, END
 
-from backend.apis import build_router
+from .apis import build_router
 
 load_dotenv()
 
@@ -281,6 +282,13 @@ def answer_question(question: str) -> str:
 def create_app() -> FastAPI:
     """Create and configure the FastAPI application."""
     app = FastAPI(title="Menu Engineering Agent API")
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
     app.include_router(build_router(answer_question, list_tools), prefix="/api")
 
     @app.get("/health")
@@ -301,4 +309,4 @@ if __name__ == "__main__":
     import uvicorn
 
     port = int(os.getenv("PORT", "8000"))
-    uvicorn.run("backend.agent:app", host="0.0.0.0", port=port, reload=False)
+    uvicorn.run(app, host="0.0.0.0", port=port, reload=False)

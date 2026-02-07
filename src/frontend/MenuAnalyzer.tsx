@@ -1,31 +1,27 @@
 import React, { useState } from 'react';
-import { AnalysisResults } from './types/MenuTypes';
-import { analyzeMenuFile } from './utils/api.ts';
-import { FileUpload } from './components/FileUpload';
+import { askAgent } from './utils/api.ts';
+import { TextInput } from './components/TextInput';
 import { LoadingSpinner } from './components/LoadingSpinner';
-import { ResultsDisplay } from './components/ResultsDisplay';
+import { AnswerDisplay } from './components/AnswerDisplay';
 import './styles/global.css';
 
 export default function MenuAnalyzer() {
-  const [file, setFile] = useState<File | null>(null);
+  const [menuText, setMenuText] = useState<string>('');
   const [analyzing, setAnalyzing] = useState<boolean>(false);
-  const [results, setResults] = useState<AnalysisResults | null>(null);
-
-  const handleFileSelect = (selectedFile: File): void => {
-    setFile(selectedFile);
-    setResults(null);
-  };
+  const [answer, setAnswer] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
   const handleAnalyze = async (): Promise<void> => {
-    if (!file) return;
+    if (!menuText.trim()) return;
     
     try {
       setAnalyzing(true);
-      const analysisResults = await analyzeMenuFile(file);
-      setResults(analysisResults);
+      setError('');
+      const response = await askAgent(menuText.trim());
+      setAnswer(response);
     } catch (error) {
       console.error('Analysis failed:', error);
-      // TODO: Add error handling UI
+      setError('Analysis failed. Please try again.');
     } finally {
       setAnalyzing(false);
     }
@@ -38,16 +34,18 @@ export default function MenuAnalyzer() {
         <p className="subtitle">AI-powered menu optimization for maximum profitability</p>
       </header>
 
-      <FileUpload 
-        file={file}
-        onFileSelect={handleFileSelect}
+      <TextInput
+        value={menuText}
+        onChange={setMenuText}
         onAnalyze={handleAnalyze}
         analyzing={analyzing}
       />
 
       {analyzing && <LoadingSpinner />}
 
-      {results && !analyzing && <ResultsDisplay results={results} />}
+      {error && !analyzing && <div className="error-banner">{error}</div>}
+
+      {answer && !analyzing && <AnswerDisplay answer={answer} />}
     </div>
   );
 }

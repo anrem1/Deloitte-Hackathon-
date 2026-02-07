@@ -2,6 +2,7 @@
 __pycache__/
 *.py[codz]
 *$py.class
+src/**/__pycache__/
 
 # C extensions
 *.so
@@ -208,3 +209,6 @@ __marimo__/
 
 # Large local artifacts
 toolbox
+
+# Node
+node_modules/
