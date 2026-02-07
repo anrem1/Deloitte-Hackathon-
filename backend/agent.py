@@ -6,12 +6,16 @@ Using Google Gemini for LLM with manual tool selection.
 import os
 import json
 import re
-from typing import TypedDict, Annotated, Sequence
-from dotenv import load_dotenv
+from typing import TypedDict
+
 import httpx
+from dotenv import load_dotenv
+from fastapi import FastAPI
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.messages import BaseMessage, HumanMessage, AIMessage
+from langchain_core.messages import HumanMessage
 from langgraph.graph import StateGraph, END
+
+from backend.apis import build_router
 
 load_dotenv()
 
@@ -96,6 +100,11 @@ def get_tools_description() -> str:
             param_desc = f" (params: {', '.join(param_names)})"
         descriptions.append(f"- {tool_name}: {desc}{param_desc}")
     return "\n".join(descriptions)
+
+
+def list_tools() -> dict:
+    """Return raw tools metadata from the toolbox server."""
+    return toolbox_client.get_tools()
 
 
 # Define the agent state
@@ -190,9 +199,10 @@ Provide a clear, concise answer (3-5 sentences) that:
 Answer:"""
 
     response = llm.invoke(prompt)
+    response_text = response.content if hasattr(response, "content") else str(response)
     
     return {
-        "final_answer": response,
+        "final_answer": response_text,
         "step": "end"
     }
 
@@ -268,22 +278,27 @@ def answer_question(question: str) -> str:
     return result.get("final_answer", "No answer generated")
 
 
-if __name__ == "__main__":
-    print("\n🤖 Menu Engineering Agent (LangGraph + MCP Toolbox + Hugging Face)")
-    print("Type 'exit' to quit\n")
+def create_app() -> FastAPI:
+    """Create and configure the FastAPI application."""
+    app = FastAPI(title="Menu Engineering Agent API")
+    app.include_router(build_router(answer_question, list_tools), prefix="/api")
 
-    while True:
-        question = input("Ask: ")
-        if question.lower() in {"exit", "quit"}:
-            break
-        
-        try:
-            answer = answer_question(question)
-            print(f"\n{answer}\n")
-        except Exception as e:
-            print(f"Error: {e}\n")
-            import traceback
-            traceback.print_exc()
-    
-    # Cleanup
-    toolbox_client.close()
+    @app.get("/health")
+    def health_check():
+        return {"status": "ok"}
+
+    @app.on_event("shutdown")
+    def shutdown_event():
+        toolbox_client.close()
+
+    return app
+
+
+app = create_app()
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    port = int(os.getenv("PORT", "8000"))
+    uvicorn.run("backend.agent:app", host="0.0.0.0", port=port, reload=False)
