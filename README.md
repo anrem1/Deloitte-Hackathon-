@@ -125,12 +125,17 @@ menu-engineer/
    ```bash
    npm run preview
    ```
+
+
 ## Installation:
 pip install -r requirements.txt
 Usage: 
 uvicorn backend.agent:app --host 0.0.0.0 --port 8000
 
-Architecture
+Install Google's MCP Toolbox using steps from this link
+https://github.com/googleapis/genai-toolbox?tab=readme-ov-file#installing-the-server
+
+## Architecture
 High-Level Design Philosophy
 The solution follows a layered analytics architecture that separates raw data ingestion, data transformation, analytics logic, and decision intelligence. This ensures scalability, explainability, and clean separation of concerns — similar to real-world consulting and data platform designs.
 Raw Data (CSV)
