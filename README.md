@@ -50,29 +50,43 @@ This repository contains the Menu Engineering prototype built for the Deloitte x
  ## Project Structure
 
 ```
+## Project Structure
+
 menu-engineer/
 ├── src/
-│   ├── components/
-│   │   ├── ChangeCard.tsx          # Individual change recommendation card
-│   │   ├── FileUpload.tsx          # File upload component with drag & drop
-│   │   ├── LoadingSpinner.tsx      # Loading state component
-│   │   ├── ResultsDisplay.tsx      # Results container component
-│   │   └── SummaryCard.tsx         # Summary statistics card
+│   ├── backend/                    # Backend (API, LLM integration, DB access)
+│   │   ├── .env                    # Backend environment variables
+│   │   ├── tools.yaml              # Tool definitions
+│   │   ├── test_setup.py           # Backend testing & setup
+│   │   ├── list_models.py          # Available model listing
+│   │   └── ...                     # Backend logic & integrations
+│   │
+│   ├── components/                 # Frontend UI components
+│   │   ├── ChangeCard.tsx
+│   │   ├── FileUpload.tsx
+│   │   ├── LoadingSpinner.tsx
+│   │   ├── ResultsDisplay.tsx
+│   │   └── SummaryCard.tsx
+│   │
 │   ├── types/
-│   │   └── menu.types.ts           # TypeScript type definitions
+│   │   └── menu.types.ts            # Shared TypeScript types
+│   │
 │   ├── utils/
-│   │   ├── api.ts                  # API service for backend communication
-│   │   └── helpers.ts              # Utility helper functions
+│   │   ├── api.ts                   # Frontend → backend API calls
+│   │   └── helpers.ts               # Utility helper functions
+│   │
 │   ├── styles/
-│   │   └── global.css              # Global styles
-│   ├── MenuAnalyzer.tsx            # Main component orchestrator
-│   └── main.tsx                    # Application entry point
+│   │   └── global.css               # Global frontend styles
+│   │
+│   ├── MenuAnalyzer.tsx             # Main frontend orchestrator
+│   └── main.tsx                     # Frontend entry point
+│
 ├── index.html
 ├── package.json
 ├── tsconfig.json
 ├── tsconfig.node.json
 └── vite.config.ts
-```
+
 
 ## Component Breakdown
 
