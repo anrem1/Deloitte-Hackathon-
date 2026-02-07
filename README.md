@@ -27,9 +27,7 @@ This repository contains the Menu Engineering prototype built for the Deloitte x
 - *Promotional Bundles* — recommends promotional combinations to move low-margin items and increase average order value.
 
 ### User Experience
-- *Drag-and-drop file upload* — accepts CSV, XLSX, and other menu formats.
 - *Interactive results dashboard* — displays menu matrix, per-item recommendations, and expected financial impact.
-- *Export functionality* — generates CSV and JSON reports for merchant integration and A/B testing.
 - *Demo-ready mock mode* — frontend works immediately without backend for prototyping.
 
 ## Screenshots:
@@ -43,12 +41,10 @@ This repository contains the Menu Engineering prototype built for the Deloitte x
 - Frontend: React 18.2.0, TypeScript 5.2.2, Vite 5.0.8
 - UI Framework: Lucide React (icons)
 - Backend (Recommended): Python 3.x, FastAPI, uvicorn
-- Data Processing:  pandas, numpy
-- ML/Analytics: scikit-learn, statsmodels
 - Database:  PostgreSQL (via Xata)
 - External APIs: Google Gemini API (for AI-powered recommendations)
 - Dev Tools: ESLint, TypeScript, npm
-- Build & Runtime:  Vite (frontend), uvicorn (backend)
+- Build & Runtime:  uvicorn (backend)
 
 
  ## Project Structure
@@ -83,7 +79,6 @@ menu-engineer/
 ### Core Components
 
 - **MenuAnalyzer.tsx**: Main container that manages state and orchestrates child components
-- **FileUpload.tsx**: Handles file selection via click or drag & drop
 - **LoadingSpinner.tsx**: Shows loading state during analysis
 - **ResultsDisplay.tsx**: Displays analysis results with summary and changes
 - **SummaryCard.tsx**: Reusable card for summary statistics
@@ -116,7 +111,7 @@ menu-engineer/
    ```bash
    npm run preview
    ```
-Installation:
+## Installation:
 pip install -r requirements.txt
 Usage: 
 uvicorn backend.agent:app --host 0.0.0.0 --port 8000
