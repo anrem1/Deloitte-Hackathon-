@@ -31,7 +31,8 @@ This repository contains the Menu Engineering prototype built for the Deloitte x
 - *Demo-ready mock mode* — frontend works immediately without backend for prototyping.
 
 ## Screenshots:
- <img width="1674" height="535" alt="image (1)" src="https://github.com/user-attachments/assets/05e17e16-09d9-426c-bd24-d08064491f8c" />
+ 
+![WhatsApp Image 2026-02-07 at 11 51 47 PM](https://github.com/user-attachments/assets/d141c9dd-d2e5-4bf2-9a57-547b5efae14f)
  <img width="1851" height="869" alt="image (2)" src="https://github.com/user-attachments/assets/e8ed73ef-0f2f-4a2d-b41f-d44119d51327" />
  <img width="1767" height="824" alt="image" src="https://github.com/user-attachments/assets/d3b89a49-736d-4a44-9d3e-5f4e8036b46f" />
 
