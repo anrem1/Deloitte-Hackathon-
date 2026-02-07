@@ -50,7 +50,7 @@ This repository contains the Menu Engineering prototype built for the Deloitte x
  ## Project Structure
 
 ```
-## Project Structure
+
 
 menu-engineer/
 ├── src/
