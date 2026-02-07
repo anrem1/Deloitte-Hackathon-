@@ -1,0 +1,118 @@
+sources:
+  menu_db:
+    kind: postgres
+    host: ${POSTGRES_HOST}
+    port: ${POSTGRES_PORT}
+    database: ${POSTGRES_DB}
+    user: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    queryParams:
+      sslmode: require
+
+tools:
+  top_revenue_items:
+    kind: postgres-sql
+    source: menu_db
+    statement: |
+      SELECT
+        di.title,
+        SUM(foi.quantity) AS total_quantity,
+        SUM(foi.price * foi.quantity) AS total_revenue,
+        SUM((foi.price - COALESCE(foi.cost, 0) - COALESCE(foi.discount_amount, 0)) * foi.quantity) AS total_profit
+      FROM fct_order_items foi
+      JOIN dim_items di ON di.id = foi.item_id
+      GROUP BY di.title
+      ORDER BY total_revenue DESC
+      LIMIT 20
+    description: |
+      Returns top revenue items (stars) with sales and profitability metrics.
+      No parameters required.
+    parameters: []
+
+  worst_items_plowhorse:
+    kind: postgres-sql
+    source: menu_db
+    statement: |
+      SELECT
+        di.title,
+        SUM(foi.quantity) AS total_quantity,
+        SUM(foi.price * foi.quantity) AS total_revenue,
+        SUM((foi.price - COALESCE(foi.cost, 0) - COALESCE(foi.discount_amount, 0)) * foi.quantity) AS total_profit
+      FROM fct_order_items foi
+      JOIN dim_items di ON di.id = foi.item_id
+      GROUP BY di.title
+      ORDER BY total_profit ASC
+      LIMIT 20
+    description: |
+      Returns low-profit items (plowhorses) to identify candidates for pricing or cost optimization.
+    parameters: []
+
+  most_ordered_items:
+    kind: postgres-sql
+    source: menu_db
+    statement: |
+      SELECT
+        di.title,
+        SUM(foi.quantity) AS total_quantity,
+        SUM(foi.price * foi.quantity) AS total_revenue
+      FROM fct_order_items foi
+      JOIN dim_items di ON di.id = foi.item_id
+      GROUP BY di.title
+      ORDER BY total_quantity DESC
+      LIMIT 20
+    description: |
+      Returns items sold the most by quantity.
+    parameters: []
+
+  profit_by_section:
+    kind: postgres-sql
+    source: menu_db
+    statement: |
+      SELECT
+        COALESCE(ds.title, dms.title, 'Unknown') AS section,
+        SUM(foi.price * foi.quantity) AS total_revenue,
+        SUM((foi.price - COALESCE(foi.cost, 0) - COALESCE(foi.discount_amount, 0)) * foi.quantity) AS total_profit,
+        SUM(foi.quantity) AS total_quantity
+      FROM fct_order_items foi
+      JOIN dim_items di ON di.id = foi.item_id
+      LEFT JOIN dim_sections ds ON ds.id = di.section_id
+      LEFT JOIN dim_menu_sections dms ON dms.id = di.section_id
+      GROUP BY section
+      ORDER BY total_profit DESC
+      LIMIT 20
+    description: |
+      Returns profit, revenue, and quantity aggregated by section.
+    parameters: []
+
+  most_ordered_per_place:
+    kind: postgres-sql
+    source: menu_db
+    statement: |
+      SELECT place_id, item_name, order_count
+      FROM most_ordered
+      WHERE ($1::bigint IS NULL OR place_id = $1)
+      ORDER BY order_count DESC
+      LIMIT 20
+    description: |
+      Returns most ordered items per place. Provide optional place_id to filter.
+      Example:
+      {
+        "place_id": 123
+      }
+    parameters:
+      - name: place_id
+        type: integer
+        description: Optional. Place ID.
+
+  low_rated_items:
+    kind: postgres-sql
+    source: menu_db
+    statement: |
+      SELECT title, rating, votes, purchases, price
+      FROM dim_menu_items
+      WHERE rating IS NOT NULL
+      ORDER BY rating ASC, votes DESC
+      LIMIT 20
+    description: |
+      Returns low-rated items to support recommendations for improvements.
+    parameters: []
