@@ -133,8 +133,7 @@ pip install -r requirements.txt
 Usage: 
 uvicorn backend.agent:app --host 0.0.0.0 --port 8000
 
-Install Google's MCP Toolbox using steps from this link
-https://github.com/googleapis/genai-toolbox?tab=readme-ov-file#installing-the-server
+Install Google's MCP Toolbox using steps from this link: https://github.com/googleapis/genai-toolbox?tab=readme-ov-file#installing-the-server
 Using this command: export $(grep -v '^#' ./src/backend/.env | xargs) && ./toolbox --tools-file tools.yaml --port 5000
 
 ## Architecture
